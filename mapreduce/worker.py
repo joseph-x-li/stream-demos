@@ -1,6 +1,5 @@
 import pystreaming as ps
 import zmq
-from models import loadmodel
 import cv2
 import jetson.utils
 import jetson.inference
