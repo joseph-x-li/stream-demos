@@ -16,10 +16,10 @@ def main():
         """
         nonlocal net
 	
-	prevw, prevh, _= frame.shape
-	
-	wscale = prevw / 480
-	hscale = prevh / 320
+        prevw, prevh, _= frame.shape
+
+        wscale = prevw / 480
+        hscale = prevh / 320
 
         frame = cv2.resize(frame, (480, 320))
         frame = jetson.utils.cudaFromNumpy(frame)
