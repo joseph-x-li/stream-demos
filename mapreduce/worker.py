@@ -3,10 +3,11 @@ import zmq
 from models import loadmodel
 import cv2
 import jetson.utils
+import jetson.inference
 
 def main():
 
-    net = loadmodel()
+    net = jetson.inference.detectNet("ssd-mobilenet-v2", None, 0.5)
     
     def func(frame):
         """Return a list of detected objects 
