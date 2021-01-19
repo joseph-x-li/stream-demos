@@ -16,7 +16,7 @@ def main():
         """
         nonlocal net
 	
-        prevw, prevh, _= frame.shape
+        prevh, prevw, _= frame.shape
 
         wscale = prevw / 480
         hscale = prevh / 320
