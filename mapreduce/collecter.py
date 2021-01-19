@@ -1,5 +1,6 @@
 from pystreaming import Collector, collate, display
-import zmq, cv2
+from collections import deque
+import zmq, cv2, time
 
 cdict = {
     1: "person",
@@ -96,13 +97,27 @@ def drawboxes(handler):
             cv2.rectangle(frame, TL, BR, fontcolor, 2)
             cv2.putText(frame, classname, (int(l) + 5, int(t) + 25), font, 1, fontcolor, 2)
         yield frame 
+        
+def dispfps(handler, n=100):
+    """Average iterations per second over last {n} iterations.
+    """
+    times = deque()
+    for data in handler:
+        end = time.time()
+        times.append(end)
+        if len(times) > n:
+            diff = end - times.popleft()
+            print(f"\rFPS: {(n / diff):.3f}", end="")
+        yield data
     
 def main():
     stream = Collector(zmq.Context(), "tcp://*:5556", mapreduce=True)
     display(
-    	drawboxes(
-            collate(
-                stream.handler()
+    	dispfps(
+            drawboxes(
+                collate(
+                    stream.handler()
+                )
             )
         )
 	)
