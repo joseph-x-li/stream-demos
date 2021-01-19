@@ -19,7 +19,7 @@ def main():
         frame = cv2.resize(frame, (480, 320))
         frame = jetson.utils.cudaFromNumpy(frame)
         detections = net.Detect(frame)
-        ret = [(d.ClassID, d.Top, d.Left, d.Right, d.Right) for d in detections]
+        ret = [(d.ClassID, d.Top, d.Left, d.Right, d.Bottom) for d in detections]
         print(ret)
         return ret
         

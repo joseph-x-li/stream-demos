@@ -1,7 +1,4 @@
-from pystreaming import Collector, collate, display
-import zmq, cv2
-
-cdict = {
+{
     1: "person",
     2: "bicycle",
     3: "car",
@@ -83,30 +80,3 @@ cdict = {
     89: "hair drier",
     90: "toothbrus",
 }
-
-font = cv2.FONT_HERSHEY_SIMPLEX
-fontcolor = (255, 0, 0)
-
-def drawboxes(handler):
-    for frame, predictions, idx in handler:
-        for predictclass, t, l, r, b in predictions:
-            classname = cdict[predictclass]
-            TL = (int(l), int(t))
-            BR = (int(r), int(b))
-            cv2.rectangle(frame, TL, BR, fontcolor, 2)
-            cv2.putText(frame, classname, (int(l) + 5, int(t) + 25), font, 1, fontcolor, 2)
-        yield frame 
-    
-def main():
-    stream = Collector(zmq.Context(), "tcp://*:5556", mapreduce=True)
-    display(
-    	drawboxes(
-            collate(
-                stream.handler()
-            )
-        )
-	)
-    
-    
-if __name__ == '__main__':
-    main()
