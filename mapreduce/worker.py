@@ -16,11 +16,16 @@ def main():
             frame (np.ndarray): Image frame. Will be resized to 480 width x 320 height
         """
         nonlocal net
+	
+	prevw, prevh, _= frame.shape
+	
+	wscale = prevw / 480
+	hscale = prevh / 320
 
         frame = cv2.resize(frame, (480, 320))
         frame = jetson.utils.cudaFromNumpy(frame)
         detections = net.Detect(frame)
-        ret = [(d.ClassID, d.Top, d.Left, d.Right, d.Bottom) for d in detections]
+        ret = [(d.ClassID, d.Top*hscale, d.Left*wscale, d.Right*wscale, d.Bottom*hscale) for d in detections]
         print(ret)
         return ret
         
